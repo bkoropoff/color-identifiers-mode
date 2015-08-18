@@ -573,6 +573,12 @@ generated if not present there."
         (setq color-identifiers:current-index
               (1+ color-identifiers:current-index))))))
 
+(defun color-identifiers:face-in-list (needle haystack)
+  (if (consp needle)
+      (or (memq (car needle) haystack)
+          (color-identifiers:face-in-list (cdr needle) haystack))
+    (memq needle haystack)))
+
 (defun color-identifiers:scan-identifiers (fn limit &optional continue-p)
   "Run FN on all identifiers from point up to LIMIT.
 Identifiers are defined by `color-identifiers:modes-alist'.
@@ -590,9 +596,9 @@ If supplied, iteration only continues if CONTINUE-P evaluates to true."
         (condition-case nil
             (while (and (< (point) limit)
                         (if continue-p (funcall continue-p) t))
-              (if (not (or (memq (get-text-property (point) 'face) identifier-faces)
+              (if (not (or (color-identifiers:face-in-list (get-text-property (point) 'face) identifier-faces)
                            (let ((flface-prop (get-text-property (point) 'font-lock-face)))
-                             (and flface-prop (memq flface-prop identifier-faces)))
+                             (and flface-prop (color-identifiers:face-in-list flface-prop identifier-faces)))
                            (get-text-property (point) 'color-identifiers:fontified)))
                   (goto-char (next-property-change (point) nil limit))
                 (if (not (and (looking-back identifier-context-re)

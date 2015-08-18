@@ -433,6 +433,33 @@ incompatible with Emacs Lisp syntax, such as reader macros (#)."
                    "\\_<\\(\\(?:\\s_\\|\\sw\\)+\\)"
                    (nil))))
 
+;; Agda
+(defun color-identifiers:agda2-mode-get-declarations ()
+  "Extract a list of identifiers declared in the current buffer.
+For agda2-mode support within color-identifiers-mode."
+  (let ((result nil))
+    (save-excursion
+      (goto-char (point-min))
+      (catch 'end-of-file
+        (while t
+          (let ((next-change (next-property-change (point))))
+            (if (not next-change)
+                (throw 'end-of-file nil)
+              (goto-char next-change)
+              (when (or (color-identifiers:face-in-list (get-text-property (point) 'face) '(agda2-highlight-bound-variable-face))
+                        (get-text-property (point) 'color-identifiers:fontified))
+                (push (substring-no-properties (symbol-name (symbol-at-point))) result)))))))
+    (delete-dups result)
+    result))
+
+(color-identifiers:set-declaration-scan-fn
+ 'agda2-mode 'color-identifiers:agda2-mode-get-declarations)
+
+(add-to-list
+ 'color-identifiers:modes-alist
+ `(agda2-mode . (""
+                 "\\_<\\(\\(?:\\s_\\|\\sw\\)+\\)"
+                 (agda2-highlight-bound-variable-face))))
 
 ;;; PACKAGE INTERNALS ==========================================================
 

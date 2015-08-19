@@ -434,6 +434,10 @@ incompatible with Emacs Lisp syntax, such as reader macros (#)."
                    (nil))))
 
 ;; Agda
+(defvar color-identifiers:agda2-faces
+  '(agda2-highlight-bound-variable-face
+    agda2-highlight-field-face))
+
 (defun color-identifiers:agda2-mode-get-declarations ()
   "Extract a list of identifiers declared in the current buffer.
 For agda2-mode support within color-identifiers-mode."
@@ -446,7 +450,7 @@ For agda2-mode support within color-identifiers-mode."
             (if (not next-change)
                 (throw 'end-of-file nil)
               (goto-char next-change)
-              (when (or (color-identifiers:face-in-list (get-text-property (point) 'face) '(agda2-highlight-bound-variable-face))
+              (when (or (color-identifiers:face-in-list (get-text-property (point) 'face) color-identifiers:agda2-faces)
                         (get-text-property (point) 'color-identifiers:fontified))
                 (push (substring-no-properties (symbol-name (symbol-at-point))) result)))))))
     (delete-dups result)
@@ -459,7 +463,7 @@ For agda2-mode support within color-identifiers-mode."
  'color-identifiers:modes-alist
  `(agda2-mode . (""
                  "\\_<\\(\\(?:\\s_\\|\\sw\\)+\\)"
-                 (agda2-highlight-bound-variable-face))))
+                 ,color-identifiers:agda2-faces)))
 
 ;;; PACKAGE INTERNALS ==========================================================
 

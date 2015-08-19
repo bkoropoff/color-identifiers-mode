@@ -436,7 +436,9 @@ incompatible with Emacs Lisp syntax, such as reader macros (#)."
 ;; Agda
 (defvar color-identifiers:agda2-faces
   '(agda2-highlight-bound-variable-face
-    agda2-highlight-field-face))
+    agda2-highlight-field-face
+    agda2-highlight-inductive-constructor-face
+    agda2-highlight-coinductive-constructor-face))
 
 (defun color-identifiers:agda2-mode-get-declarations ()
   "Extract a list of identifiers declared in the current buffer.

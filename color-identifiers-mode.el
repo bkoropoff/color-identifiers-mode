@@ -465,6 +465,10 @@ For agda2-mode support within color-identifiers-mode."
                  "\\_<\\(\\(?:\\s_\\|\\sw\\)+\\)"
                  ,color-identifiers:agda2-faces)))
 
+;; Refresh immediately when agda2-mode applies annotations on file load
+(defadvice agda2-highlight-apply (after color-identifiers:agda2-refresh-on-load activate)
+  (color-identifiers:refresh))
+
 ;;; PACKAGE INTERNALS ==========================================================
 
 (defvar color-identifiers:timer nil

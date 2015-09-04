@@ -450,6 +450,29 @@ incompatible with Emacs Lisp syntax, such as reader macros (#)."
 (defadvice agda2-highlight-apply (after color-identifiers:agda2-refresh-on-load activate)
   (color-identifiers:refresh))
 
+;; rcirc
+(defvar color-identifiers:rcirc-faces
+  '(rcirc-other-nick rcirc-server nil))
+
+(defun color-identifiers:rcirc-mode-get-declarations ()
+  (let ((proc (rcirc-buffer-process)))
+    (delete (rcirc-nick proc)
+            (rcirc-channel-nicks proc rcirc-target))))
+
+(color-identifiers:set-declaration-scan-fn
+ 'rcirc-mode 'color-identifiers:rcirc-mode-get-declarations)
+
+(add-to-list
+ 'color-identifiers:modes-alist
+ `(rcirc-mode . (""
+                 "\\<\\([][a-zA-Z_\\-\\\\{}`^][][a-zA-Z0-9_\\\\{}`^]*\\)"
+                 ,color-identifiers:rcirc-faces)))
+
+(add-hook 'rcirc-mode-hook '(lambda () (setq font-lock-keywords-only t)))
+
+(add-hook 'rcirc-activity-functions
+          '(lambda (buffer) (with-current-buffer buffer (color-identifiers:refresh))))
+
 ;;; PACKAGE INTERNALS ==========================================================
 
 (defvar color-identifiers:timer nil

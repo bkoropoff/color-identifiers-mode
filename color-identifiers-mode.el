@@ -468,10 +468,15 @@ incompatible with Emacs Lisp syntax, such as reader macros (#)."
                  "\\<\\([][a-zA-Z_\\-\\\\{}`^][][a-zA-Z0-9_\\\\{}`^]*\\)"
                  ,color-identifiers:rcirc-faces)))
 
-(add-hook 'rcirc-mode-hook '(lambda () (setq-local font-lock-keywords-only t)))
+(defun color-identifiers:rcirc-mode-hook ()
+  (setq-local font-lock-defaults '(nil t)))
 
-(add-hook 'rcirc-activity-functions
-          '(lambda (buffer) (with-current-buffer buffer (color-identifiers:refresh))))
+(add-hook 'rcirc-mode-hook 'color-identifiers:rcirc-mode-hook)
+
+(defun color-identifiers:rcirc-print-function (_a _b _c _d _e)
+  (color-identifiers:refresh))
+
+(add-hook 'rcirc-print-functions 'color-identifiers:rcirc-print-function)
 
 ;;; PACKAGE INTERNALS ==========================================================
 

@@ -157,7 +157,7 @@ For cc-mode support within color-identifiers-mode."
    'color-identifiers:modes-alist
    `(,maj-mode . (""
                   "\\_<\\([a-zA-Z_$]\\(?:\\s_\\|\\sw\\)*\\)"
-                  (nil font-lock-variable-name-face)))))
+                  (nil font-lock-variable-name-face font-lock-type-face)))))
 
 ;;; JavaScript
 (add-to-list

@@ -456,8 +456,9 @@ incompatible with Emacs Lisp syntax, such as reader macros (#)."
 
 (defun color-identifiers:rcirc-mode-get-declarations ()
   (let ((proc (rcirc-buffer-process)))
-    (delete (rcirc-nick proc)
-            (rcirc-channel-nicks proc rcirc-target))))
+    (when proc
+      (delete (rcirc-nick proc)
+              (rcirc-channel-nicks proc rcirc-target)))))
 
 (color-identifiers:set-declaration-scan-fn
  'rcirc-mode 'color-identifiers:rcirc-mode-get-declarations)
